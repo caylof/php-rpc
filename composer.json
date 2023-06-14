@@ -1,0 +1,26 @@
+{
+    "name": "caylof/rpc",
+    "type": "library",
+    "description": "a simple PHP RPC library",
+    "keywords": ["php-rpc", "rpc", "workman-rpc", "workman-protobuf"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "caylof",
+            "email": "caylof@qq.com"
+        }
+    ],
+    "require": {
+        "psr/container": "^2.0",
+        "google/protobuf": "^3.23"
+    },
+    "require-dev": {
+        "illuminate/container": "^10.13",
+        "workerman/workerman": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Caylof\\Rpc\\": "src/"
+        }
+    }
+}

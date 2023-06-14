@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package dto.user;
+
+option php_namespace = "GPBMetadata\\Dto\\User";
+option php_metadata_namespace = "GPBMetadata\\Pb\\User";
+
+message UserSearchRequest {
+  uint64 page = 1;
+  uint64 perPage = 2;
+  string id = 3;
+  string name = 4;
+}
+
+message UserEntity {
+  string id = 1;
+  string name = 2;
+  string gender = 3;
+}
+
+message UserSearchResult {
+  uint64 total = 1;
+  repeated UserEntity items = 2;
+}
