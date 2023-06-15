@@ -9,7 +9,7 @@ class ServiceCaller
     public function call(Payload $request): Payload
     {
         $fn = $this->callerRepository->get($request->caller);
-        $param = $request->getUnSerializeData();
+        $param = $request->getRawData();
         $callResult = $fn($param);
 
         $reply = new Payload();

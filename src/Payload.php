@@ -20,7 +20,7 @@ class Payload
         }
     }
 
-    public function getUnSerializeData(): array | Message
+    public function getRawData(): array | Message
     {
         if (empty($this->protobufClass)) {
             return json_decode($this->serializeData, true);

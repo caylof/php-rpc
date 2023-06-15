@@ -52,7 +52,7 @@ class WorkmanFrameClient
         $data = substr($data, 4);
 
         $result = Protocol::decode($data);
-        return $result->getUnSerializeData();
+        return $result->getRawData();
     }
 
     protected function receivePackage(): false|string {
