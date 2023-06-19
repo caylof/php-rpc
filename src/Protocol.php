@@ -6,10 +6,10 @@ final class Protocol
 {
     public static function encode(Payload $payload): string
     {
-        return pack('na*na*a*',
+        return pack('nna*a*a*',
             strlen($payload->caller),
-            $payload->caller,
             strlen($payload->protobufClass),
+            $payload->caller,
             $payload->protobufClass,
             $payload->serializeData,
         );
@@ -17,16 +17,13 @@ final class Protocol
 
     public static function decode(string $data): Payload
     {
-        $chuck = unpack('ncaller_len', substr($data, 0, 2));
+        $chuck = unpack('ncaller_len/nclazz_len', substr($data, 0, 4));
         $callerLen = $chuck['caller_len'];
-        $data = substr($data, 2);
-
-        $chuck = unpack(sprintf('a%dcaller/nclazz_len', $callerLen), $data);
-        $caller = $chuck['caller'];
         $clazzLen = $chuck['clazz_len'];
-        $data = substr($data, $callerLen + 2);
+        $data = substr($data, 4);
 
-        $chuck = unpack(sprintf('a%dclazz/a*data', $clazzLen), $data);
+        $chuck = unpack(sprintf('a%dcaller/a%dclazz/a*data', $callerLen, $clazzLen), $data);
+        $caller = $chuck['caller'];
         $protobufClass = $chuck['clazz'];
         $serializeData = $chuck['data'];
 
