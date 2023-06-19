@@ -10,6 +10,13 @@ class WorkmanServer
 {
     protected ServiceCaller $serviceCaller;
 
+    public function __construct(?ServiceCaller $serviceCaller = null)
+    {
+        if (! is_null($serviceCaller)) {
+            $this->setServiceCaller($serviceCaller);
+        }
+    }
+
     public function setServiceCaller(ServiceCaller $serviceCaller): void
     {
         $this->serviceCaller = $serviceCaller;

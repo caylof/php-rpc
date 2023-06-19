@@ -6,6 +6,13 @@ class ServiceCaller
 {
     protected CallerRepositoryInterface $callerRepository;
 
+    public function __construct(?CallerRepositoryInterface $callerRepository = null)
+    {
+        if (! is_null($callerRepository)) {
+            $this->setCallerRegistry($callerRepository);
+        }
+    }
+
     public function call(Payload $request): Payload
     {
         $fn = $this->callerRepository->get($request->caller);

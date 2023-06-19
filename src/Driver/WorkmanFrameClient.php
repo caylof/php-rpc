@@ -19,9 +19,10 @@ class WorkmanFrameClient
         $this->connect();
     }
 
-    public function connect(): void {
+    public function connect(): void
+    {
         $sock = stream_socket_client(
-            address:sprintf('%s://%s:%d', $this->protocol, $this->host, $this->port),
+            address: sprintf('%s://%s:%d', $this->protocol, $this->host, $this->port),
             error_code: $errCode,
             error_message: $errMsg,
             timeout: 5
@@ -32,7 +33,7 @@ class WorkmanFrameClient
         $this->sock = $sock;
     }
 
-    public function call(string $caller, array | Message $param): array | Message
+    public function call(string $caller, array|Message $param): array|Message
     {
         $request = new Payload();
         $request->caller = $caller;
@@ -55,7 +56,8 @@ class WorkmanFrameClient
         return $result->getRawData();
     }
 
-    protected function receivePackage(): false|string {
+    protected function receivePackage(): false|string
+    {
         // workman frame protocol 定义初始化收包长度为4，用于获取一个完整数据包的长度
         $totLen = $readMaxSize = 4;
         $buff = '';
@@ -80,8 +82,9 @@ class WorkmanFrameClient
         return $buff;
     }
 
-    public function __destruct() {
-        if (! empty($this->sock)) {
+    public function __destruct()
+    {
+        if (!empty($this->sock)) {
             fclose($this->sock);
         }
     }
