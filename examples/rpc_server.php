@@ -14,6 +14,12 @@ use Workerman\Worker;
 /// 定义服务 rpc service
 class TestSrv
 {
+    /// auth service
+    public function auth(array $param): array
+    {
+        $verified = ($param['token'] === '123456');
+        return compact('verified');
+    }
     /// json (array)
     public function hello(array $param): array
     {
@@ -52,6 +58,9 @@ $serviceCaller->setCallerRegistry(new \Caylof\Rpc\ServiceRepository($container))
 
 $server = new \Caylof\Rpc\Driver\WorkmanServer();
 $server->setServiceCaller($serviceCaller);
+//$server->setAuthHandler('TestSrv@auth', function($result) {
+//    return $result['verified'];
+//});
 
 /// 启动 workman server
 Worker::$pidFile = __DIR__ . '/rpc-server-pid';
@@ -61,5 +70,6 @@ $host = '0.0.0.0';
 $port = 2345;
 $worker = new Worker(sprintf('frame://%s:%d', $host, $port));
 $worker->count = 1;
+$worker->onConnect = $server->onConnect(...);
 $worker->onMessage = $server->onMessage(...);
 Worker::runAll();

@@ -17,6 +17,8 @@ $client = new \Caylof\Rpc\Driver\WorkmanFrameClient(
     host: '127.0.0.1',
     port: 2345,
 );
+//$client->call('TestSrv@auth', ['token' => '123456']);
+
 $result = $client->call('TestSrv@hello', ['name' => 'cctv']);
 var_dump($result);
 
