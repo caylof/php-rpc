@@ -5,6 +5,10 @@ namespace Caylof\Rpc;
 class ServiceCaller
 {
     protected CallerRepositoryInterface $callerRepository;
+    /**
+     * @var callable(\Throwable): array
+     */
+    protected $errorHandler;
 
     public function __construct(?CallerRepositoryInterface $callerRepository = null)
     {
@@ -17,16 +21,26 @@ class ServiceCaller
     {
         $fn = $this->callerRepository->get($request->caller);
         $param = $request->getRawData();
-        $callResult = $fn($param);
-
         $reply = new Payload();
         $reply->caller = $request->caller;
-        $reply->putRawData($callResult);
+        try {
+            $callResult = $fn($param);
+            $reply->callError = 0;
+            $reply->putRawData($callResult);
+        } catch (\Throwable $e) {
+            $reply->callError = 1;
+            $reply->putRawData(($this->errorHandler)($e));
+        }
         return $reply;
     }
 
     public function setCallerRegistry(CallerRepositoryInterface $callerRepository): void
     {
         $this->callerRepository = $callerRepository;
+    }
+
+    public function setErrorHandler(callable $errorHandler): void
+    {
+        $this->errorHandler = $errorHandler;
     }
 }

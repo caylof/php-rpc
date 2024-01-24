@@ -9,6 +9,7 @@ class Payload
     public string $caller = '';
     public string $serializeData = '';
     public string $protobufClass = '';
+    public int $callError = 0;
 
     public function putRawData(array | Message $data): void
     {

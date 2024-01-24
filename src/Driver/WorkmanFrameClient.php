@@ -5,6 +5,7 @@ namespace Caylof\Rpc\Driver;
 use Caylof\Rpc\Payload;
 use Caylof\Rpc\Protocol;
 use Google\Protobuf\Internal\Message;
+use JetBrains\PhpStorm\ArrayShape;
 
 class WorkmanFrameClient
 {
@@ -33,7 +34,12 @@ class WorkmanFrameClient
         $this->sock = $sock;
     }
 
-    public function call(string $caller, array|Message $param): array|Message
+    /**
+     * @param string $caller
+     * @param array|Message $param
+     * @return array{int, array|Message}
+     */
+    public function call(string $caller, array|Message $param): array
     {
         $request = new Payload();
         $request->caller = $caller;
@@ -53,7 +59,7 @@ class WorkmanFrameClient
         $data = substr($data, 4);
 
         $result = Protocol::decode($data);
-        return $result->getRawData();
+        return [$result->callError, $result->getRawData()];
     }
 
     protected function receivePackage(): false|string

@@ -19,22 +19,27 @@ $client = new \Caylof\Rpc\Driver\WorkmanFrameClient(
 );
 //$client->call('TestSrv@auth', ['token' => '123456']);
 
-$result = $client->call('TestSrv@hello', ['name' => 'cctv']);
-var_dump($result);
+$reply = $client->call('TestSrv@hello', ['name' => 'cctv']);
+var_dump($reply);
 
 
 /// test protobuf
-$result = $client->call('TestSrv@haha', new \GPBMetadata\Dto\User\UserSearchRequest([
+$reply = $client->call('TestSrv@haha', new \GPBMetadata\Dto\User\UserSearchRequest([
     'page' => 1,
     'perPage' => 15,
     'id' => 'u1',
 ]));
-var_dump($result->serializeToJsonString());
+[$errCode, $result] = $reply;
+var_dump($errCode, $result->serializeToJsonString());
 
 /// test mix
-$result = $client->call('TestSrv@hi', new \GPBMetadata\Dto\User\UserSearchRequest([
+$reply = $client->call('TestSrv@hi', new \GPBMetadata\Dto\User\UserSearchRequest([
     'page' => 1,
     'perPage' => 15,
     'id' => 'u1',
 ]));
-var_dump($result);
+var_dump($reply);
+
+/// test error
+$reply = $client->call('TestSrv@throws', ['name' => 'cctv']);
+var_dump($reply);

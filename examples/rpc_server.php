@@ -48,6 +48,11 @@ class TestSrv
         $id = $request->getId();
         return ['id' => $id, 'name' => 'cctv'];
     }
+
+    public function throws(array $param): array
+    {
+        throw new \LogicException('test error.');
+    }
 }
 
 $container = new \Illuminate\Container\Container();
@@ -55,6 +60,7 @@ $container->singleton(TestSrv::class, TestSrv::class);
 
 $serviceCaller = new \Caylof\Rpc\ServiceCaller();
 $serviceCaller->setCallerRegistry(new \Caylof\Rpc\ServiceRepository($container));
+$serviceCaller->setErrorHandler(fn(\Throwable $e) => ['msg' => $e->getMessage()]);
 
 $server = new \Caylof\Rpc\Driver\WorkmanServer();
 $server->setServiceCaller($serviceCaller);
